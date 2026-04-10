@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Threat Logs Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #020617;
+            color: white;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #38bdf8;
+        }
+
+        table {
+            width: 95%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #1e293b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #334155;
+            font-size: 14px;
+        }
+
+        th {
+            background: #0f172a;
+            color: #22c55e;
+        }
+
+        tr:hover {
+            background: #334155;
+        }
+
+        .low { color: #22c55e; }
+        .medium { color: #facc15; }
+        .high { color: #fb923c; }
+        .critical { color: #ef4444; font-weight: bold; }
+
+        .kill {
+            color: red;
+            font-weight: bold;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            background: #22c55e;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: #16a34a;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>🚨 AI Threat Logs Dashboard</h2>
+
+<a href="/add_test">
+    <button class="btn">➕ Add Test Log</button>
+</a>
+
+<a href="/logout">
+    <button class="btn" style="background:red;">Logout</button>
+</a>
+
+<table>
+    <tr>
+        <th>User</th>
+        <th>Activity</th>
+        <th>Status</th>
+        <th>Threat</th>
+        <th>Anomaly</th>
+        <th>Decision</th>
+        <th>Action</th>
+        <th>Severity</th>
+        <th>Risk</th>
+        <th>MITRE</th>
+        <th>Kill Chain</th>
+        <th>IP</th>
+        <th>Location</th>
+        <th>Time</th>
+    </tr>
+
+    {% for log in logs %}
+    <tr>
+        <td>{{ log.user }}</td>
+        <td>{{ log.activity }}</td>
+        <td>{{ log.status }}</td>
+        <td>{{ log.threat }}</td>
+        <td>{{ log.anomaly }}</td>
+        <td>{{ log.ai_decision }}</td>
+        <td>{{ log.ai_action }}</td>
+
+        <!-- Severity -->
+        <td class="
+            {% if log.severity == 'Low' %}low
+            {% elif log.severity == 'Medium' %}medium
+            {% elif log.severity == 'High' %}high
+            {% else %}critical
+            {% endif %}
+        ">
+            {{ log.severity }}
+        </td>
+
+        <td>{{ log.risk }}</td>
+
+        <!-- MITRE -->
+        <td style="color:#22c55e; font-weight:bold;">
+            {{ log.mitre }}
+        </td>
+
+        <!-- Kill Chain -->
+        <td>
+            {% if log.kill_chain %}
+                <span class="kill">🚨 Attack Chain</span>
+            {% else %}
+                -
+            {% endif %}
+        </td>
+
+        <td>{{ log.ip }}</td>
+        <td>{{ log.location }}</td>
+        <td>{{ log.timestamp }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>
